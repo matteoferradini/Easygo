@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagamento completato – EASY GO</title>
+
+  <!-- Font elegante stile Apple -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.25);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --accent: #0a84ff;
+      --radius: 28px;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #8ec5fc 0%, #e0c3fc 100%);
+      background-attachment: fixed;
+      overflow: hidden;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 40px 50px;
+      text-align: center;
+      color: #fff;
+      box-shadow: var(--shadow);
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .checkmark {
+      width: 90px;
+      height: 90px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 20px rgba(10, 132, 255, 0.4);
+      animation: pop 0.4s ease-out;
+    }
+
+    .checkmark svg {
+      width: 48px;
+      height: 48px;
+      stroke: #fff;
+      stroke-width: 3;
+      fill: none;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 25px;
+      opacity: 0.9;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 12px 28px;
+      border-radius: 25px;
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.25s;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.5);
+      color: var(--accent);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glass-card">
+    <div class="checkmark">
+      <svg viewBox="0 0 52 52">
+        <path d="M14 27l7 7 17-17"></path>
+      </svg>
+    </div>
+    <h1>Pagamento completato ✅</h1>
+    <p>Grazie per la tua prenotazione con <b>EASY GO</b>!<br>Abbiamo ricevuto il pagamento e ti contatteremo a breve.</p>
+    <a href="index.html" class="btn">Torna alla Home</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EASY GO – Area riservata</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FullCalendar -->
+  <link rel="stylesheet" href="https://unpkg.com/fullcalendar@6.1.11/index.min.css">
+
+  <style>
+    :root{
+      --bg:#f2f3f7; --ink:#1a1a1a; --muted:#6c757d;
+      --brand:#007aff; --brand-2:#0056d9; --danger:#e11d48;
+      --glass:rgba(255,255,255,.45); --line:rgba(255,255,255,.35);
+      --blur:30px; --radius:28px; --shadow:0 6px 30px rgba(0,0,0,.08);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0d0d0d; --ink:#f5f5f7; --muted:#a0a0a0;
+        --glass:rgba(20,20,20,.45); --line:rgba(255,255,255,.08);
+        --brand:#0a84ff; --brand-2:#3c9dff; --shadow:0 8px 26px rgba(0,0,0,.4);
+      }
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{background:var(--bg);color:var(--ink);font-family:"Poppins",-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;line-height:1.55}
+    a{text-decoration:none}
+    /* Header glass */
+    header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.5);backdrop-filter:blur(var(--blur)) saturate(160%);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.04)}
+    @media (prefers-color-scheme: dark){header{background:rgba(20,20,20,.5)}}
+    header .bar{max-width:1100px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;gap:10px}
+    header h1{font-size:20px;font-weight:800}
+    header .badge{margin-left:auto;background:rgba(255,255,255,.5);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:999px;padding:6px 12px;font-weight:700}
+
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+
+    /* Panels glass */
+    .panel{background:var(--glass);backdrop-filter:blur(var(--blur)) saturate(160%);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .right{margin-left:auto}
+
+    /* Inputs / buttons */
+    input,select,button{font-family:inherit}
+    input[type="password"],input[type="search"],select{
+      padding:12px 14px;border-radius:22px;border:1px solid rgba(255,255,255,.4);
+      background:rgba(255,255,255,.6);backdrop-filter:blur(12px);
+      min-width:220px
+    }
+    .btn{padding:12px 16px;border:0;border-radius:999px;font-weight:800;cursor:pointer;transition:all .25s}
+    .btn-primary{background:var(--brand);color:#fff;box-shadow:0 8px 20px rgba(0,122,255,.25)}
+    .btn-primary:hover{background:var(--brand-2);transform:translateY(-1px)}
+    .btn-ghost{background:rgba(255,255,255,.35);color:#0b4f6c;border:1px solid rgba(255,255,255,.35)}
+    .btn-danger{background:var(--danger);color:#fff}
+    .segmented{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+    .segmented button{flex:1;background:rgba(255,255,255,.35);padding:10px 14px;border:0}
+    .segmented button.active{background:rgba(255,255,255,.6);font-weight:800}
+
+    /* Filters row */
+    .filters{display:flex;gap:10px;flex-wrap:wrap}
+    .filters input[type="search"]{min-width:260px}
+    .tag{display:inline-block;background:rgba(255,255,255,.55);border:1px solid var(--line);backdrop-filter:blur(12px);padding:4px 10px;border-radius:999px}
+
+    /* Table */
+    .table-wrap{overflow:auto;border-radius:16px;border:1px solid var(--line)}
+    table{width:100%;border-collapse:collapse;background:rgba(255,255,255,.35);backdrop-filter:blur(16px)}
+    th,td{padding:12px;border-bottom:1px solid rgba(255,255,255,.35);vertical-align:top}
+    th{font-weight:700;text-align:left;background:rgba(255,255,255,.45)}
+    tr:hover td{background:rgba(255,255,255,.35)}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+    /* Calendar */
+    #calendar{--fc-border-color: rgba(255,255,255,.25)}
+    .fc{--fc-page-bg-color: transparent;--fc-neutral-bg-color: rgba(255,255,255,.25);--fc-now-indicator-color: var(--brand)}
+    .fc .fc-toolbar{gap:8px}
+    .fc .fc-button{border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.55);color:#0b4f6c}
+    .fc .fc-button-primary:not(:disabled).fc-button-active{background:rgba(255,255,255,.75)}
+    .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .legend .item{display:flex;align-items:center;gap:6px}
+    .legend .dot{width:12px;height:12px;border-radius:999px;display:inline-block;border:1px solid rgba(255,255,255,.6)}
+
+    /* Toast */
+    .toast{position:fixed;bottom:16px;right:16px;background:rgba(17,17,17,.85);color:#fff;padding:10px 14px;border-radius:20px;opacity:0;transform:translateY(8px);transition:.25s;z-index:1000;backdrop-filter:blur(14px)}
+    .toast.show{opacity:1;transform:translateY(0)}
+
+    /* Mobile */
+    @media (max-width:720px){
+      input[type="password"],input[type="search"],select{min-width:unset;width:100%}
+      .segmented{width:100%}
+      .filters{width:100%}
+      .table-wrap{border-radius:14px}
+      th,td{padding:10px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <h1>🔒 EASY GO – Area riservata</h1>
+      <span class="badge">iOS Glass UI</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Accesso -->
+    <div id="keyPanel" class="panel">
+      <div class="row" style="margin-bottom:8px">
+        <div>
+          <div style="font-weight:800">Accesso amministratore</div>
+          <div style="color:var(--muted)">Inserisci la chiave segreta per gestire le prenotazioni.</div>
+        </div>
+      </div>
+      <div class="row">
+        <input type="password" id="adminKey" placeholder="Inserisci chiave admin" />
+        <button class="btn btn-primary" id="saveKey">Accedi</button>
+        <button class="btn btn-ghost" id="clearKey">Esci</button>
+      </div>
+      <div style="color:var(--muted);margin-top:6px">Suggerimento: la chiave è quella impostata in Apps Script (<code>ADMIN_KEY</code>).</div>
+    </div>
+
+    <!-- Barra viste / filtri -->
+    <div id="viewBar" class="panel" style="display:none">
+      <div class="row">
+        <div class="segmented">
+          <button id="tabTable" class="active">Tabella</button>
+          <button id="tabCalendar">Calendario</button>
+        </div>
+        <div class="right filters">
+          <input type="search" id="q" placeholder="Cerca (nome, email, gommone, data)">
+          <select id="onlyFuture">
+            <option value="all">Tutte le date</option>
+            <option value="future">Solo future</option>
+          </select>
+          <button class="btn btn-ghost" id="refreshBtn">Aggiorna</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabella -->
+    <div id="listPanel" class="panel" style="display:none">
+      <div class="row" style="margin-bottom:6px">
+        <strong>📋 Prenotazioni</strong>
+        <span class="tag" id="countTag">0</span>
+      </div>
+      <div class="table-wrap">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>Riga</th>
+              <th>Data</th>
+              <th>Gommone</th>
+              <th>Cliente</th>
+              <th>Email</th>
+              <th>Messaggio</th>
+              <th>Creato</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div style="color:var(--muted);margin-top:8px">
+        ⚠️ L’eliminazione rimuove definitivamente la riga dal foglio.
+      </div>
+    </div>
+
+    <!-- Calendario -->
+    <div id="calendarPanel" class="panel" style="display:none">
+      <div id="calendar"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/fullcalendar@6.1.11/index.global.min.js"></script>
+  <script>
+    // ====== CONFIG ======
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyXVNJLkQhZ4lhiXSGJlXadTQIMakxOHyQbgztfXBEqORDzJhstv3PcjjFCzAmu3UhUXg/exec";
+
+    // ====== UTIL ======
+    const el = s => document.querySelector(s);
+    const toast = msg => { const t = el('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); };
+    const todayISO = () => new Date().toISOString().slice(0,10);
+    const getKey = () => localStorage.getItem('easygo_admin_key') || '';
+    const setKey = v => localStorage.setItem('easygo_admin_key', v || '');
+
+    // Logout via URL
+    (function(){ const p = new URLSearchParams(location.search); if (p.get('logout')==='1'){ localStorage.removeItem('easygo_admin_key'); history.replaceState({},'',location.pathname);} })();
+
+    // ====== STATE ======
+    let ALL_ROWS = [];
+    let calendar = null;
+
+    // ====== LOGIN UI ======
+    function showPanels(hasKey){
+      el('#keyPanel').style.display = hasKey ? 'none' : 'block';
+      el('#viewBar').style.display = hasKey ? 'block' : 'none';
+      const tableActive = el('#tabTable').classList.contains('active');
+      el('#listPanel').style.display = hasKey && tableActive ? 'block' : 'none';
+      el('#calendarPanel').style.display = hasKey && !tableActive ? 'block' : 'none';
+      if (hasKey) loadList();
+    }
+
+    el('#saveKey').addEventListener('click', async ()=>{
+      const v = el('#adminKey').value.trim();
+      if(!v){ toast('Inserisci la chiave'); return; }
+      try{ await fetch(WEBAPP_URL + "?action=version").then(r=>r.json()).catch(()=>{});}catch(_){}
+      setKey(v); el('#adminKey').value = '';
+      // attiva Tabella by default
+      el('#tabCalendar').classList.remove('active');
+      el('#tabTable').classList.add('active');
+      showPanels(true);
+      toast('Accesso effettuato');
+    });
+
+    el('#clearKey').addEventListener('click', ()=>{ setKey(''); showPanels(false); toast('Sei uscito dall’area'); });
+
+    // ====== LOAD LIST ======
+    async function loadList(){
+      try{
+        const key = getKey();
+        const data = await fetch(WEBAPP_URL + "?action=list&key=" + encodeURIComponent(key)).then(r=>r.json());
+        if(!data.ok){ toast('Chiave non valida o accesso negato'); setKey(''); showPanels(false); return; }
+        ALL_ROWS = data.rows || [];
+        renderTable();
+        renderCalendar(true);
+        toast('Elenco aggiornato');
+      }catch(e){ console.error(e); toast('Errore di connessione'); }
+    }
+
+    // ====== TABLE ======
+    function renderTable(){
+      const q = el('#q').value.trim().toLowerCase();
+      const onlyFuture = el('#onlyFuture').value === 'future';
+      const today = todayISO();
+      let rows = ALL_ROWS.slice();
+      if(q){
+        rows = rows.filter(r =>
+          (r.data_iso||'').toLowerCase().includes(q) ||
+          (r.boat_id||'').toLowerCase().includes(q) ||
+          (r.boat_nome||'').toLowerCase().includes(q) ||
+          (r.nome||'').toLowerCase().includes(q) ||
+          (r.email||'').toLowerCase().includes(q) ||
+          (r.messaggio||'').toLowerCase().includes(q)
+        );
+      }
+      if(onlyFuture) rows = rows.filter(r => (r.data_iso||'') >= today);
+      rows.sort((a,b)=> String(a.data_iso).localeCompare(String(b.data_iso)));
+      el('#countTag').textContent = rows.length.toString();
+
+      const tbody = el('#tbl tbody'); tbody.innerHTML = '';
+      rows.forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><code>${r.row}</code></td>
+          <td>${r.data_iso || ''}</td>
+          <td>${r.boat_nome || r.boat_id || ''}</td>
+          <td>${r.nome || ''}</td>
+          <td><a href="mailto:${r.email}">${r.email || ''}</a></td>
+          <td>${(r.messaggio || '').replace(/\n/g,'<br>')}</td>
+          <td style="color:var(--muted)">${r.timestamp || ''}</td>
+          <td><button class="btn btn-danger" data-row="${r.row}">Elimina</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      tbody.querySelectorAll('button.btn-danger').forEach(btn=>btn.addEventListener('click', onDeleteClick));
+    }
+
+    async function onDeleteClick(ev){
+      const row = ev.currentTarget.getAttribute('data-row');
+      const ok = confirm(`Eliminare la riga ${row}? Operazione irreversibile.`);
+      if(!ok) return;
+      try{
+        const payload = { action:'delete', key:getKey(), row:Number(row) };
+        const out = await fetch(WEBAPP_URL, { method:'POST', headers:{'Content-Type':'text/plain','Accept':'application/json'}, body: JSON.stringify(payload) }).then(r=>r.json());
+        if(out.ok){
+          toast('Prenotazione eliminata');
+          ALL_ROWS = ALL_ROWS.filter(x => String(x.row) !== String(row));
+          renderTable();
+          renderCalendar(true);
+        }else{
+          toast(out.error || 'Errore eliminazione');
+        }
+      }catch(e){ console.error(e); toast('Errore di connessione'); }
+    }
+
+    // ====== CALENDAR ======
+    function renderCalendar(forceRebuild=false){
+      // palette per gommone
+      const colors = {};
+      const palette = ['#0ea5e9','#10b981','#f59e0b','#ef4444','#8b5cf6','#14b8a6','#84cc16','#e11d48'];
+      let i=0;
+      ALL_ROWS.forEach(r=>{
+        const k=(r.boat_nome||r.boat_id||'Altro').trim();
+        if(!colors[k]){ colors[k]=palette[i%palette.length]; i++; }
+      });
+
+      const events = ALL_ROWS.map(r=>({
+        title:(r.boat_nome||r.boat_id||'')+' – '+(r.nome||''),
+        start:r.data_iso, allDay:true,
+        backgroundColor:colors[(r.boat_nome||r.boat_id||'Altro').trim()],
+        borderColor:colors[(r.boat_nome||r.boat_id||'Altro').trim()],
+        textColor:'#fff',
+        extendedProps:{ row:r.row, email:r.email }
+      }));
+
+      // legenda
+      const leg = el('#legend'); leg.innerHTML='';
+      Object.keys(colors).forEach(name=>{
+        const d=document.createElement('div'); d.className='item';
+        d.innerHTML=`<span class="dot" style="background:${colors[name]}"></span><span>${name}</span>`;
+        leg.appendChild(d);
+      });
+
+      const calEl = el('#calendar');
+      if(!calendar || forceRebuild){
+        if(calendar) calendar.destroy();
+        calendar = new FullCalendar.Calendar(calEl, {
+          initialView: window.innerWidth<720 ? 'listMonth' : 'dayGridMonth',
+          height:'auto',
+          headerToolbar:{left:'prev,next today',center:'title',right:'dayGridMonth,listMonth'},
+          events,
+          eventClick: async (info)=>{
+            const r = info.event.extendedProps.row;
+            const ok = confirm(`Eliminare questa prenotazione?\n\n${info.event.title}\n(riga ${r})`);
+            if(!ok) return;
+            try{
+              const out = await fetch(WEBAPP_URL, { method:'POST', headers:{'Content-Type':'text/plain','Accept':'application/json'}, body: JSON.stringify({action:'delete', key:getKey(), row:Number(r)})}).then(r=>r.json());
+              if(out.ok){
+                toast('Prenotazione eliminata');
+                ALL_ROWS = ALL_ROWS.filter(x => String(x.row)!==String(r));
+                info.event.remove();
+                renderTable();
+              }else{
+                toast(out.error||'Errore eliminazione');
+              }
+            }catch(e){ console.error(e); toast('Errore di connessione'); }
+          }
+        });
+        calendar.render();
+      }else{
+        calendar.removeAllEvents();
+        calendar.addEventSource(events);
+      }
+    }
+
+    // Tabs
+    el('#tabTable').addEventListener('click', ()=>{
+      el('#tabCalendar').classList.remove('active');
+      el('#tabTable').classList.add('active');
+      el('#calendarPanel').style.display='none';
+      el('#listPanel').style.display='block';
+    });
+    el('#tabCalendar').addEventListener('click', ()=>{
+      el('#tabTable').classList.remove('active');
+      el('#tabCalendar').classList.add('active');
+      el('#listPanel').style.display='none';
+      el('#calendarPanel').style.display='block';
+      renderCalendar();
+    });
+
+    // Filtri
+    el('#q').addEventListener('input', renderTable);
+    el('#onlyFuture').addEventListener('change', renderTable);
+    el('#refreshBtn').addEventListener('click', loadList);
+
+    // Start
+    document.addEventListener('DOMContentLoaded', ()=> showPanels(!!getKey()));
+  </script>
+</body>
+</html>

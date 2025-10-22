@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EASY GO</title>
+
+  <!-- FONT + STILE -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Calendario -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <!-- Script principale -->
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>EASY GO</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#gommoni">Gommoni</a></li>
+        <li><a href="#contatti">Prenota</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-content glass">
+      <h2>Scopri la libertà del mare 🌊</h2>
+      <p>Noleggia un gommone e vivi la costa di Olbia come non l’hai mai vista.</p>
+      <a href="#gommoni" class="btn">Scegli il tuo gommone</a>
+    </div>
+  </section>
+
+  <!-- GOMMONI -->
+  <section id="gommoni" class="gommoni">
+    <h2>I nostri gommoni</h2>
+    <div id="boatsGrid" class="card-container"></div>
+  </section>
+
+  <!-- PRENOTAZIONE -->
+  <section id="contatti" class="contatti">
+    <h2>Prenota ora</h2>
+
+    <!-- Gommone selezionato -->
+    <div id="selezioneBanner" class="selezione-banner" hidden>
+      Gommone selezionato: <strong id="selezioneNome"></strong>
+      <button id="cambiaGommone" type="button" class="linklike">Cambia</button>
+    </div>
+
+    <form id="bookingForm" action="#">
+      <input type="hidden" id="gommoneSelezionato" name="gommone" />
+
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="data">Data prenotazione:</label>
+      <input type="text" id="data" name="data" placeholder="Seleziona la data" required>
+
+      <label for="messaggio">Messaggio:</label>
+      <textarea id="messaggio" name="messaggio" placeholder="Note o orario preferito" required></textarea>
+
+      <button type="submit" class="btn">📩 Invia richiesta</button>
+    </form>
+
+    <!-- PAGAMENTO -->
+    <div class="pagamento glass">
+      <h3>Pagamento</h3>
+
+      <div class="radio-group">
+        <label><input type="radio" name="paymode" value="deposit" checked> Acconto 30%</label>
+        <label><input type="radio" name="paymode" value="full"> Saldo totale</label>
+      </div>
+
+      <div id="amountPreview" class="amount-preview">Importo: —</div>
+
+      <button type="button" id="btnPagaOra" class="btn-pay">💳 Paga ora con carta (Stripe)</button>
+    </div>
+
+    <p class="nota">Seleziona prima il gommone e la data, poi procedi al pagamento.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 EASY GO – Tutti i diritti riservati</p>
+  </footer>
+</body>
+</html>
